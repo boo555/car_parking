@@ -1,0 +1,11 @@
+obstacle_range: 8.0 #  The "obstacle_range" parameter determines the maximum range sensor reading that will result in an obstacle being put into the costmap.
+raytrace_range: 8.0 # The "raytrace_range" parameter determines the range to which we will raytrace freespace given a sensor reading. 
+
+footprint: [[-2.5, -1.0], [-2.5, 1.0], [2.5, 1.0], [2.5, -1.0]]
+
+inflation_radius: 0.8 # The inflation radius should be set to the maximum distance from obstacles at which a cost should be incurred
+observation_sources: scan
+scan: {sensor_frame: catvehicle/front_laser_link, data_type: LaserScan, topic: scan, marking: true, clearing: true}
+
+cost_scaling_factor: 3.0
+map_type: costmap

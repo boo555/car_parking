@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+    <include file="$(find car_parking)/launch/move_base.launch"/>
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find car_parking)/rviz/navigation.rviz" />
+</launch>

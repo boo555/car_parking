@@ -1,0 +1,8 @@
+global_costmap:
+  global_frame: map # global frame
+  robot_base_frame: catvehicle/base_link # robot base frame
+
+  update_frequency: 10.0 # update frequency for the global costmap
+  publish_frequency: 10.0 # publish frequency for the global costmap
+
+  static_map: true 

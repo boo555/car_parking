@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+    <!-- Arguments -->
+    <arg name="cmd_vel_topic" default="/catvehicle/cmd_vel" />
+    <!-- <arg name="cmd_vel_topic" default="cmd_vel" /> -->
+    <arg name="odom_topic" default="/catvehicle/odom" />
+    <arg name="scan_topic" default="/catvehicle/front_laser_points" />
+    
+     <!-- Run the map server --> 
+    <node name="map_server" pkg="map_server" type="map_server" args="$(find car_parking)/maps/blank_map.yaml"/>
+    
+    <!--- Run AMCL -->
+    <!--- We load ACML here with diff=true to support our differential drive robot -->
+    <!--- <include file="$(find amcl)/examples/amcl_diff.launch" /> -->
+
+    <!-- move_base -->
+    <node pkg="tf" name="map_odom_tf_node" type="static_transform_publisher" args="0 0 0 1.571 0 0 /map /world 50"/> 
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+        <rosparam file="$(find car_parking)/params/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find car_parking)/params/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(find car_parking)/params/local_costmap_params.yaml" command="load" />
+        <rosparam file="$(find car_parking)/params/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find car_parking)/params/base_local_planner_params.yaml" command="load" />
+        
+        <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
+        <param name="controller_frequency" value="10.0" />
+        
+        <remap from="cmd_vel" to="$(arg cmd_vel_topic)" />
+        <remap from="odom" to="$(arg odom_topic)" />
+        <remap from="scan" to="$(arg scan_topic)"/>
+        
+
+    </node>
+</launch> 

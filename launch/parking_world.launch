@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+
+	  <arg name="paused" default="false"/>
+	  <arg name="use_sim_time" default="true"/>
+	  <arg name="gui" default="true"/>
+	  <arg name="headless" default="false"/>
+	  <arg name="debug" default="false"/>
+      <arg name="obstaclestopper" default="false"/>
+      <arg name="updateRate" default="20.0"/>
+      
+      <arg name="front_laser_points" default="true"/>
+      <arg name="velodyne_points" default="false"/>
+      <arg name="camera_right" default="false"/>
+      <arg name="camera_left" default="false"/>
+      <!-- change these defaults here, to see further left with the velodyne   -->
+      <arg name="velodyne_max_angle" default="0.4"/>
+      <!-- change these defaults here, to see further right with the velodyne   -->
+      <arg name="velodyne_min_angle" default="-0.4"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find car_parking)/worlds/canyonview_with_cars.world"/>
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="headless" value="$(arg headless)"/>
+  </include>
+
+<group ns="catvehicle">
+ <param name="robot_description"
+         command="$(find xacro)/xacro '$(find catvehicle)/urdf/catvehicle.xacro' roboname:='catvehicle' updateRate:='$(arg updateRate)' front_laser_points:='$(arg front_laser_points)' velodyne_points:='$(arg velodyne_points)' camera_right:='$(arg camera_right)' camera_left:='$(arg camera_left)' velodyne_max_angle:='$(arg velodyne_max_angle)' velodyne_min_angle:='$(arg velodyne_min_angle)'" />
+
+<include file="$(find catvehicle)/launch/catvehicle.launch">
+    <arg name="robot_name" value="catvehicle"/>
+    <arg name="init_pose" value="-x 15.0 -y 11.0 -Y -1.571"/>
+    <arg name="obstaclestopper" value="$(arg obstaclestopper)"/>
+    <arg name="config_file" value="catvehicle_control.yaml"/>
+</include>
+</group>
+
+</launch>
